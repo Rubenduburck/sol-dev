@@ -13,7 +13,6 @@ A collection of utilities and macros to enhance Solana program development, focu
 Add the following to your `Cargo.toml`:
 
 ```toml
-```toml
 [dependencies]
 sol_dev_utils = "0.1.0"
 sol_dev_macros = "0.1.0"
