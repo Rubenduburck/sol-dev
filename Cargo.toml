@@ -8,6 +8,8 @@ members = [
 name = "sol-dev"
 version = "0.1.0"
 edition = "2021"
+authors = ["Ruben du Burck <rubenduburck@gmail.com>"]
+repository = "https://github.com/rubenduburck/sol-dev"
 
 
 [workspace.dependencies]
