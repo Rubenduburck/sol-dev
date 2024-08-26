@@ -4,20 +4,78 @@ use proc_macro::TokenStream;
 use quote::quote;
 use syn::{parse_macro_input, ItemFn};
 
+/// Generates a discriminant for a given function name within a global namespace.
+///
+/// This macro is used to create a unique identifier (discriminant) for a function
+/// within the Anchor framework. It's typically used for generating unique
+/// instruction identifiers in Solana programs.
+///
+/// Anchor typically requires adds the namespace to the function name to generate
+/// a unique identifier. In this macro, we default to the global namespace if no
+/// namespace is provided.
+///
+/// # Arguments
+///
+/// * `input` - A `TokenStream` containing the function name to generate a discriminant for.
+///
+/// # Returns
+///
+/// A `TokenStream` representing an array of bytes, which is the generated discriminant.
+///
+/// # Example
+///
+/// ```rust
+/// match discriminant {
+///     sol_dev_proc_macros::anchor_discriminant![initialize] => <initialize_fn>(),
+///     // This is equivalent to:
+///     // sol_dev_proc_macros::anchor_discriminant![global:initialize] => <initialize_fn>(),
+///     sol_dev_proc_macros::anchor_discriminant![other] => <other_fn>(),
+///     sol_dev_proc_macros::anchor_discriminant![my_namespace:other] => <other_fn>(),
+/// ```
 #[proc_macro]
-pub fn discriminant(input: TokenStream) -> TokenStream {
+pub fn anchor_discriminant(input: TokenStream) -> TokenStream {
     const NAMESPACE: &str = "global";
     let function_name = input.to_string();
-    let arr = sol_dev_utils::anchor_discriminant(NAMESPACE, &function_name);
+    // If the function does not contain a namespace, we add the global namespace.
+    let full_name = if function_name.contains(':') {
+        function_name
+    } else {
+        format!("{}:{}", NAMESPACE, function_name)
+    };
+    let arr = sol_dev_utils::anchor_discriminant(&full_name);
     let expanded = quote::quote! {
         [#(#arr),*]
     };
     TokenStream::from(expanded)
 }
 
-/// Total extra compute units used per compute_fn! call 409 CU
-/// https://github.com/anza-xyz/agave/blob/d88050cda335f87e872eddbdf8506bc063f039d3/programs/bpf_loader/src/syscalls/logging.rs#L70
-/// https://github.com/anza-xyz/agave/blob/d88050cda335f87e872eddbdf8506bc063f039d3/program-runtime/src/compute_budget.rs#L150
+/// Attribute macro for instrumenting functions with compute unit logging.
+///
+/// This macro wraps the decorated function with additional logging statements
+/// that print the function name and the number of compute units used before and after
+/// the function execution.
+///
+/// # Usage
+///
+/// ```rust
+/// #[compute_fn]
+/// fn my_function() {
+///     // Function body
+/// }
+/// ```
+///
+/// # Effects
+///
+/// - Adds a log message with the function name at the start of execution.
+/// - Logs the number of compute units before and after the function execution.
+/// - Adds a closing log message with the function name at the end of execution.
+///
+/// # Note
+///
+/// Total extra compute units used per `compute_fn!` call: 409 CU
+/// For more details, see:
+/// - https://github.com/anza-xyz/agave/blob/d88050cda335f87e872eddbdf8506bc063f039d3/programs/bpf_loader/src/syscalls/logging.rs#L70
+/// - https://github.com/anza-xyz/agave/blob/d88050cda335f87e872eddbdf8506bc063f039d3/program-runtime/src/compute_budget.rs#L150
 #[proc_macro_attribute]
 pub fn compute_fn(_attr: TokenStream, item: TokenStream) -> TokenStream {
     let mut input = parse_macro_input!(item as ItemFn);

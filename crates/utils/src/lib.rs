@@ -1,9 +1,26 @@
 use sha2::Digest;
 
-/// The discriminant for a function is sha-256(function_name)[..8]
-pub fn anchor_discriminant(namespace: &str, function_name: &str) -> [u8; 8] {
+/// Calculates the discriminant for a function using SHA-256 hash.
+///
+/// The discriminant is defined as the first 8 bytes of the SHA-256 hash of the function name.
+///
+/// # Arguments
+///
+/// * `input` - A string slice that holds the function name.
+///
+/// # Returns
+///
+/// An array of 8 bytes representing the discriminant.
+///
+/// # Examples
+///
+/// ```
+/// let discriminant = anchor_discriminant("my_function");
+/// assert_eq!(discriminant.len(), 8);
+/// ```
+pub fn anchor_discriminant(input: &str) -> [u8; 8] {
     let mut hasher = sha2::Sha256::new();
-    hasher.update(format!("{}:{}", namespace, function_name));
+    hasher.update(input);
     let result = hasher.finalize();
     result[..8].try_into().unwrap()
 }
