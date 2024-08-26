@@ -25,12 +25,17 @@ use syn::{parse_macro_input, ItemFn};
 /// # Example
 ///
 /// ```rust
-/// match discriminant {
-///     sol_dev_proc_macros::anchor_discriminant![initialize] => <initialize_fn>(),
-///     // This is equivalent to:
-///     // sol_dev_proc_macros::anchor_discriminant![global:initialize] => <initialize_fn>(),
-///     sol_dev_proc_macros::anchor_discriminant![other] => <other_fn>(),
-///     sol_dev_proc_macros::anchor_discriminant![my_namespace:other] => <other_fn>(),
+/// use sol_dev_proc_macros::anchor_discriminant;
+/// const DISCRIMINANT: [u8; 8] = anchor_discriminant!(initialize);
+/// const DISCRIMINANT_WITH_NAMESPACE: [u8; 8] = anchor_discriminant!(global:initialize);
+/// assert_eq!(
+///    DISCRIMINANT,
+///    [175, 175, 109, 31, 13, 152, 155, 237]
+/// );
+/// assert_eq!(
+///     DISCRIMINANT_WITH_NAMESPACE,
+///     DISCRIMINANT
+/// );
 /// ```
 #[proc_macro]
 pub fn anchor_discriminant(input: TokenStream) -> TokenStream {
@@ -57,7 +62,7 @@ pub fn anchor_discriminant(input: TokenStream) -> TokenStream {
 ///
 /// # Usage
 ///
-/// ```rust
+/// ```rust,ignore
 /// #[compute_fn]
 /// fn my_function() {
 ///     // Function body

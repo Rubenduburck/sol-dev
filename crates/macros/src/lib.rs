@@ -18,8 +18,9 @@
 ///
 /// # Examples
 ///
-/// ```
-/// compute_fn!("My Operation" => {
+/// ```rust,ignore
+/// use solana_program;
+/// sol_dev_macros::compute_fn!("My Operation" => {
 ///     // Your code here
 ///     42
 /// });

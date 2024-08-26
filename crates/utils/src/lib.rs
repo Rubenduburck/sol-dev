@@ -15,8 +15,8 @@ use sha2::Digest;
 /// # Examples
 ///
 /// ```
-/// let discriminant = anchor_discriminant("my_function");
-/// assert_eq!(discriminant.len(), 8);
+/// let discriminant = sol_dev_utils::anchor_discriminant("initialize");
+/// assert_eq!(discriminant, [175, 175, 109, 31, 13, 152, 155, 237]);
 /// ```
 pub fn anchor_discriminant(input: &str) -> [u8; 8] {
     let mut hasher = sha2::Sha256::new();
