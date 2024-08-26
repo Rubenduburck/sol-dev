@@ -1,3 +1,4 @@
+/// Original [here](https://github.com/thlorenz/sol-contracts/blob/master/packages/sol-common/rust/src/lib.rs)
 /// A macro for logging compute units used by a specific code block.
 ///
 /// This macro wraps a code block, logging the compute units before and after its execution.
@@ -30,6 +31,7 @@
 ///
 /// * [Logging syscall](https://github.com/anza-xyz/agave/blob/d88050cda335f87e872eddbdf8506bc063f039d3/programs/bpf_loader/src/syscalls/logging.rs#L70)
 /// * [Compute budget](https://github.com/anza-xyz/agave/blob/d88050cda335f87e872eddbdf8506bc063f039d3/program-runtime/src/compute_budget.rs#L150)
+/// 
 #[macro_export]
 macro_rules! compute_fn {
     ($msg:expr=> $($tt:tt)*) => {

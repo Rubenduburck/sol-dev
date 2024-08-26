@@ -22,12 +22,15 @@ sol_dev_proc_macros = "0.1.0"
 ## Usage
 
 ### Instruction Discriminants
+Handles the global namespace automatically if no namespace is provided.
 
 ```rust
 use sol_dev_proc_macros::anchor_discriminant;
 
 match discriminant {
     anchor_discriminant![initialize] => initialize(),
+    // This is equivalent to:
+    // anchor_discriminant![global:initialize] => initialize(),
     anchor_discriminant![process] => process(),
     anchor_discriminant![custom:finalize] => finalize(),
     _ => return Err(ProgramError::InvalidInstructionData.into()),
@@ -40,7 +43,7 @@ match discriminant {
 use sol_dev_proc_macros::compute_fn;
 
 #[compute_fn]
-fn my_expensive_operation() {
+fn some_fn() {
     // Function body
 }
 ```
@@ -50,7 +53,7 @@ use sol_dev_macros::compute_fn;
 
 compute_fn!("My Operation" => {
     // Your code here
-    perform_calculation();
+    some_fn();
 });
 ```
 
