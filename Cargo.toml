@@ -1,0 +1,19 @@
+[workspace]
+resolver = "2"
+members = [
+    "crates/*",
+]
+
+[workspace.package]
+name = "sol-dev"
+version = "0.1.0"
+edition = "2021"
+
+
+[workspace.dependencies]
+sol-dev-proc-macros = { path = "crates/proc-macros" }
+sol-dev-macros = { path = "crates/macros" }
+sol-dev-utils = { path = "crates/utils" }
+
+borsh = "1.5.1"
+

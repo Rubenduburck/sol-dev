@@ -1,0 +1,8 @@
+[package]
+name = "sol-dev-macro-test"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+sol-dev-utils = { workspace = true }
+sol-dev-proc-macros = { workspace = true }
