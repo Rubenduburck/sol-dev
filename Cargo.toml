@@ -14,7 +14,7 @@ description = "A collection of tools for developing Solana programs."
 license = "MIT OR Apache-2.0"
 readme = "README.md"
 keywords = ["solana", "sol-dev", "sol-dev-utils", "sol-dev-macros", "sol-dev-proc-macros"]
-categories = ["development-tools", "solana"]
+categories = ["development-tools"]
 
 
 [workspace.dependencies]
