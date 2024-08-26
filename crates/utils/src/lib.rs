@@ -1,3 +1,6 @@
+extern crate sha2;
+use std::convert::TryInto;
+
 use sha2::Digest;
 
 /// Calculates the discriminant for a function using SHA-256 hash.
