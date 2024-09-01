@@ -78,7 +78,61 @@ pub fn anchor_discriminant(input: TokenStream) -> TokenStream {
 /// - Logs the number of compute units before and after the function execution.
 /// - Adds a closing log message with the function name at the end of execution.
 ///
-/// # Note
+/// # Note on Compute Units Used by `compute_fn!`
+///
+/// ## Testing Results (as of 2024-09-01)
+///
+/// //solana_program::log::sol_log_compute_units(); // 199687
+/// //solana_program::log::sol_log_compute_units();
+/// //solana_program::msg!("Program log: some_function_name {{");
+/// //solana_program::msg!("}} // some_function_name");
+/// //solana_program::log::sol_log_compute_units();
+/// //solana_program::log::sol_log_compute_units(); // 199178 (409)
+///
+/// //solana_program::log::sol_log_compute_units(); // 199687
+/// //msg!("Test program");
+/// //solana_program::log::sol_log_compute_units(); // 199483 (204)
+///
+/// //solana_program::log::sol_log_compute_units(); // 199687
+/// //msg!("Program log: some_incredibly_unrealistically_unreasonably_long_function_name {{");
+/// //solana_program::log::sol_log_compute_units(); // 199483 (204)
+/// //
+/// //solana_program::log::sol_log_compute_units(); // 199382
+/// //msg!("}} // some_incredibly_unrealistically_unreasonably_long_function_name");
+/// //solana_program::log::sol_log_compute_units(); // 199178 (204)
+///
+/// //solana_program::log::sol_log_compute_units(); // 199687
+/// //msg!("Program log: some_function_name {{");
+/// //solana_program::log::sol_log_compute_units(); // 199483 (204)
+/// //
+/// //solana_program::log::sol_log_compute_units(); // 199382
+/// //msg!("}} // some_function_name");
+/// //solana_program::log::sol_log_compute_units(); // 199178 (204)
+///
+/// //solana_program::log::sol_log_compute_units(); // 199682
+/// //msg!("a");
+/// //solana_program::log::sol_log_compute_units(); // 199478 (204)
+/// //
+/// //solana_program::log::sol_log_compute_units(); // 199377
+/// //msg!("b");
+/// //solana_program::log::sol_log_compute_units(); // 199173 (204)
+/// //
+/// //solana_program::log::sol_log_compute_units(); // 199072
+/// //msg!("aa");
+/// //solana_program::log::sol_log_compute_units(); // 198868 (204)
+/// //
+/// //solana_program::log::sol_log_compute_units(); // 198767
+/// //msg!("aaa");
+/// //solana_program::log::sol_log_compute_units(); // 198563 (204)
+/// //
+/// //solana_program::log::sol_log_compute_units(); // 198462
+/// //msg!("aaaaaaaaaa");
+/// //solana_program::log::sol_log_compute_units(); // 198258 (204)
+///
+/// //solana_program::log::sol_log_compute_units(); // 199687
+/// //solana_program::log::sol_log_compute_units(); // 199586 (101)
+/// //solana_program::log::sol_log_compute_units(); // 199485 (101)
+///
 ///
 /// Total extra compute units used per `compute_fn!` call: 409 CU
 /// For more details, see:
@@ -91,13 +145,13 @@ pub fn compute_fn(_attr: TokenStream, item: TokenStream) -> TokenStream {
     let block = &input.block;
 
     input.block = syn::parse_quote!({
-        ::solana_program::msg!(concat!(stringify!(#fn_name), " {"));
+        ::solana_program::msg!(concat!(stringify!(#fn_name), " {{"));
         ::solana_program::log::sol_log_compute_units();
 
         let __result = (|| #block)();
 
         ::solana_program::log::sol_log_compute_units();
-        ::solana_program::msg!(concat!("} // ", stringify!(#fn_name)));
+        ::solana_program::msg!(concat!("}} // ", stringify!(#fn_name)));
 
         __result
     });
