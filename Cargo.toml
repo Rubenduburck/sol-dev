@@ -6,7 +6,7 @@ members = [
 
 [workspace.package]
 name = "sol-dev"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2021"
 authors = ["Ruben du Burck <rubenduburck@gmail.com>"]
 repository = "https://github.com/rubenduburck/sol-dev"
@@ -21,6 +21,7 @@ categories = ["development-tools"]
 sol-dev-proc-macros = { path = "crates/proc-macros" }
 sol-dev-macros = { path = "crates/macros" }
 sol-dev-utils = { path = "crates/utils" }
+sol-dev-cli = { path = "crates/cli" }
 
 borsh = "1.5.1"
 

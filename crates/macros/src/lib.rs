@@ -31,7 +31,7 @@
 ///
 /// * [Logging syscall](https://github.com/anza-xyz/agave/blob/d88050cda335f87e872eddbdf8506bc063f039d3/programs/bpf_loader/src/syscalls/logging.rs#L70)
 /// * [Compute budget](https://github.com/anza-xyz/agave/blob/d88050cda335f87e872eddbdf8506bc063f039d3/program-runtime/src/compute_budget.rs#L150)
-/// 
+///
 #[macro_export]
 macro_rules! compute_fn {
     ($msg:expr=> $($tt:tt)*) => {
