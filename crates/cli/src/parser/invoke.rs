@@ -38,7 +38,8 @@ impl<'a> TryFrom<&'a str> for Invoke<'a> {
 }
 
 impl Invoke<'_> {
-    pub const LOG_COST: i32 = 0;
+    pub const LOG_COST_CALLER: i32 = 0;
+    pub const LOG_COST_INNER: i32 = 0;
     pub fn new(name: &'_ str, depth: u32) -> Invoke<'_> {
         Invoke {
             id: name,

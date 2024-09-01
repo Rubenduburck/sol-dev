@@ -27,7 +27,10 @@ lazy_static::lazy_static! {
 // A compute log starts with a line that contains "Program log: <fn_name> {"
 // and ends with al ine that contains "Program log: } // <fn_name>"
 impl Function<'_> {
-    pub const LOG_COST: i32 = 409;
+    // Log cost for the caller is 2 x msg! + 2 x sol_log_compute_units = 601
+    pub const LOG_COST_CALLER: i32 = 409;
+    // Log cost for the inner is 2 x sol_log_compute_units = 202
+    pub const LOG_COST_INNER: i32 = 101;
     pub fn new(fn_name: &'_ str) -> Function<'_> {
         Function {
             id: fn_name,

@@ -82,62 +82,32 @@ pub fn anchor_discriminant(input: TokenStream) -> TokenStream {
 ///
 /// ## Testing Results (as of 2024-09-01)
 ///
-/// //solana_program::log::sol_log_compute_units(); // 199687
-/// //solana_program::log::sol_log_compute_units();
-/// //solana_program::msg!("Program log: some_function_name {{");
-/// //solana_program::msg!("}} // some_function_name");
-/// //solana_program::log::sol_log_compute_units();
-/// //solana_program::log::sol_log_compute_units(); // 199178 (409)
+///  TOTAL COST OF LOGGING: 445 - 36 = 409
+///  EXTRA COST INSIDE THE FUNCTION: 101
 ///
-/// //solana_program::log::sol_log_compute_units(); // 199687
-/// //msg!("Test program");
-/// //solana_program::log::sol_log_compute_units(); // 199483 (204)
+///  EMPTY_WITH_LOG where nothing happens inside the log.
+///  TOTAL COMPUTE UNITS USED: 445
+///  INNER LOG COST: 101
 ///
-/// //solana_program::log::sol_log_compute_units(); // 199687
-/// //msg!("Program log: some_incredibly_unrealistically_unreasonably_long_function_name {{");
-/// //solana_program::log::sol_log_compute_units(); // 199483 (204)
-/// //
-/// //solana_program::log::sol_log_compute_units(); // 199382
-/// //msg!("}} // some_incredibly_unrealistically_unreasonably_long_function_name");
-/// //solana_program::log::sol_log_compute_units(); // 199178 (204)
+///  "Program EMPTY_WITH_LOG invoke [1]",
+///  "Program log: Program log: process_instruction {{",
+///  "Program consumption: 199762 units remaining", 
+///  "Program consumption: 199661 units remaining", // 199762 - 199661 = 101
+///  "Program log: Program log: }} // process_instruction",
+///  "Program EMPTY_WITH_LOG consumed 445 of 200000 compute units",
+///  "Program EMPTY_WITH_LOG success"
 ///
-/// //solana_program::log::sol_log_compute_units(); // 199687
-/// //msg!("Program log: some_function_name {{");
-/// //solana_program::log::sol_log_compute_units(); // 199483 (204)
-/// //
-/// //solana_program::log::sol_log_compute_units(); // 199382
-/// //msg!("}} // some_function_name");
-/// //solana_program::log::sol_log_compute_units(); // 199178 (204)
-///
-/// //solana_program::log::sol_log_compute_units(); // 199682
-/// //msg!("a");
-/// //solana_program::log::sol_log_compute_units(); // 199478 (204)
-/// //
-/// //solana_program::log::sol_log_compute_units(); // 199377
-/// //msg!("b");
-/// //solana_program::log::sol_log_compute_units(); // 199173 (204)
-/// //
-/// //solana_program::log::sol_log_compute_units(); // 199072
-/// //msg!("aa");
-/// //solana_program::log::sol_log_compute_units(); // 198868 (204)
-/// //
-/// //solana_program::log::sol_log_compute_units(); // 198767
-/// //msg!("aaa");
-/// //solana_program::log::sol_log_compute_units(); // 198563 (204)
-/// //
-/// //solana_program::log::sol_log_compute_units(); // 198462
-/// //msg!("aaaaaaaaaa");
-/// //solana_program::log::sol_log_compute_units(); // 198258 (204)
-///
-/// //solana_program::log::sol_log_compute_units(); // 199687
-/// //solana_program::log::sol_log_compute_units(); // 199586 (101)
-/// //solana_program::log::sol_log_compute_units(); // 199485 (101)
-///
-///
-/// Total extra compute units used per `compute_fn!` call: 409 CU
-/// For more details, see:
-/// - https://github.com/anza-xyz/agave/blob/d88050cda335f87e872eddbdf8506bc063f039d3/programs/bpf_loader/src/syscalls/logging.rs#L70
-/// - https://github.com/anza-xyz/agave/blob/d88050cda335f87e872eddbdf8506bc063f039d3/program-runtime/src/compute_budget.rs#L150
+///  EMPTY where nothing happens at all.
+///  TOTAL COMPUTE UNITS USED: 36
+///  
+///  "Program EMPTY invoke [1]",
+///  "Program EMPTY consumed 36 of 200000 compute units",
+///  "Program EMPTY success"
+///  
+///  Total extra compute units used per `compute_fn!` call: 409 CU
+///  For more details, see:
+///  - https://github.com/anza-xyz/agave/blob/d88050cda335f87e872eddbdf8506bc063f039d3/programs/bpf_loader/src/syscalls/logging.rs#L70
+///  - https://github.com/anza-xyz/agave/blob/d88050cda335f87e872eddbdf8506bc063f039d3/program-runtime/src/compute_budget.rs#L150
 #[proc_macro_attribute]
 pub fn compute_fn(_attr: TokenStream, item: TokenStream) -> TokenStream {
     let mut input = parse_macro_input!(item as ItemFn);
