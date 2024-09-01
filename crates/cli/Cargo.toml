@@ -1,5 +1,5 @@
 [package]
-name = "cli"
+name = "sol-dev-cli"
 
 version.workspace = true
 authors.workspace = true
