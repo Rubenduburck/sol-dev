@@ -91,7 +91,7 @@ pub fn anchor_discriminant(input: TokenStream) -> TokenStream {
 ///
 ///  "Program EMPTY_WITH_LOG invoke [1]",
 ///  "Program log: Program log: process_instruction {{",
-///  "Program consumption: 199762 units remaining", 
+///  "Program consumption: 199762 units remaining",
 ///  "Program consumption: 199661 units remaining", // 199762 - 199661 = 101
 ///  "Program log: Program log: }} // process_instruction",
 ///  "Program EMPTY_WITH_LOG consumed 445 of 200000 compute units",
