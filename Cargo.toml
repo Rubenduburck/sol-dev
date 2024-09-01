@@ -13,7 +13,7 @@ repository = "https://github.com/rubenduburck/sol-dev"
 description = "A collection of tools for developing Solana programs."
 license = "MIT OR Apache-2.0"
 readme = "README.md"
-keywords = ["solana", "sol-dev", "sol-dev-utils", "sol-dev-macros", "sol-dev-proc-macros", "sol-dev-cli"]
+keywords = ["solana", "sol-dev", "compute", "development", "tools"]
 categories = ["development-tools"]
 
 
