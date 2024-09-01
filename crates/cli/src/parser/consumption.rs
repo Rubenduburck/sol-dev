@@ -260,9 +260,17 @@ mod tests {
         "Program SOME_PROGRAM success",
     ];
 
-    #[test]
-    #[tracing_test::traced_test]
-    fn test_compute_consumption() {
+    const SIMPLE_INPUT: &[&str] = &[
+        "Program SOME_PROGRAM invoke [1]",
+        "Program log: fn_one {{",
+        "Program consumption: 10000 units remaining",
+        "Program consumption: 5000 units remaining",
+        "Program log: }} // fn_one",
+        "Program SOME_PROGRAM consumed 6000 of 10000 compute units",
+        "Program SOME_PROGRAM success",
+    ];
+
+    fn test_assert(input: &[&str]) {
         fn assert_children(log: &dyn Consumer) {
             assert!(log.naive_local() >= 0);
             assert!(log.naive_global() >= 0);
@@ -272,13 +280,52 @@ mod tests {
                 assert_children(child);
             }
         }
-        let log = Log::from_slice(INPUT);
+
+        fn total(log: &dyn Consumer) -> i32 {
+            fn total_recurse(log: &dyn Consumer) -> i32 {
+                log.local_ex_log()
+                    + log
+                        .children()
+                        .into_iter()
+                        .map(|c| total_recurse(c as &dyn Consumer))
+                        .sum::<i32>()
+            }
+            total_recurse(log)
+        }
+        let log = Log::from_slice(input);
         let text = serde_json::to_string_pretty(&log).unwrap();
         tracing::debug!("{}", text);
-        for inner_log in log.inner_logs {
+        for inner_log in log.inner_logs.iter() {
             tracing::debug!("{:?}", inner_log);
-            let consumer = &inner_log as &dyn Consumer;
+            let consumer = inner_log as &dyn Consumer;
             assert_children(consumer);
         }
+        let total_local = log
+            .inner_logs
+            .iter()
+            .map(|c| total(c as &dyn Consumer))
+            .sum::<i32>();
+        let parent_global = log
+            .inner_logs
+            .iter()
+            .map(|c| c.global_ex_log())
+            .sum::<i32>();
+        tracing::debug!("total_local: {}", total_local);
+        tracing::debug!("parent_global: {}", parent_global);
+        assert!(total_local >= 0);
+        assert!(parent_global >= 0);
+        assert!(total_local == parent_global);
+    }
+
+    #[test]
+    #[tracing_test::traced_test]
+    fn test_compute_consumption_simple() {
+        test_assert(SIMPLE_INPUT);
+    }
+
+    #[test]
+    #[tracing_test::traced_test]
+    fn test_compute_consumption() {
+        test_assert(INPUT);
     }
 }
