@@ -15,7 +15,7 @@ A collection of utilities and macros to enhance Solana program development, focu
 
 ```toml
 [dependencies]
-sol_dev_macros = "0.1.3"
+sol_dev_macros = "0.1.4"
 ```
 
 ### Usage
@@ -40,7 +40,7 @@ Produces log entries:
 
 ```toml
 [dependencies]
-sol_dev_macros = "0.1.3"
+sol_dev_macros = "0.1.4"
 ```
 
 ### Usage
@@ -89,7 +89,7 @@ This parses logs into JSON that looks like this:
                 "naive_local": 726,
                 "naive_global": 2971,
                 "local": 418,
-                "global": 1123,
+                "global": 11.4,
                 "children": [<children>]
             } 
         <more children>
@@ -142,7 +142,7 @@ My advice is to only use measurements to quantify the *relative* cost of differe
 
 ```toml
 [dependencies]
-sol_dev_utils = "0.1.3"
+sol_dev_utils = "0.1.4"
 ```
 
 ### Usage
