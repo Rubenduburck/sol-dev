@@ -11,14 +11,49 @@ A collection of utilities and macros to enhance Solana program development, focu
 
 *Read below for important notes on CU measurement correction.
 
+### Recommended Usage
+```toml
+[dependencies]
+sol_dev_proc_macros = "0.1.5"
+[features]
+compute-fn = []
+```
+
+```rust
+use sol_dev_proc_macros::compute_fn;
+#[cfg_attr(feature = "compute-fn", compute_fn)]
+fn my_function() {
+    // Function body
+}
+```
+
+with `Cargo.toml`:
+
+Then if you want to enable logging, compile with:
+```bash
+cargo build-sbf --features compute-fn
+```
+
+If you build normally, the `compute_fn` attribute will be stripped from the code and introduces **no overhead**.
+
+Then
+```bash
+cargo install sol-dev-cli
+sol-dev-cli parse dir <path-to-dir>
+```
+
+parses all your logs to `log_parsed.json`.
+
+
 ## sol-dev-proc-macros [![Crates.io](https://img.shields.io/crates/v/sol-dev-proc-macros.svg)](https://crates.io/crates/sol-dev-proc-macros) [![Crates.io](https://img.shields.io/crates/d/sol-dev-proc-macros.svg)](https://crates.io/crates/sol-dev-proc-macros) [![Crates.io](https://img.shields.io/crates/l/sol-dev-proc-macros.svg)](https://crates.io/crates/sol-dev-proc-macros)
 
 ```toml
 [dependencies]
-sol_dev_macros = "0.1.4"
+sol_dev_proc_macros = "0.1.5"
 ```
 
 ### Usage
+
 ```rust
 use sol_dev_proc_macros::compute_fn;
 
@@ -27,6 +62,7 @@ fn my_function() {
     // Function body
 }
 ```
+
 Produces log entries:
 ```json
 [
@@ -36,11 +72,12 @@ Produces log entries:
     "Program log: }} my_function"
 ]
 ```
+
 ## sol-dev-macros [![Crates.io](https://img.shields.io/crates/v/sol-dev-macros.svg)](https://crates.io/crates/sol-dev-macros) [![Crates.io](https://img.shields.io/crates/d/sol-dev-macros.svg)](https://crates.io/crates/sol-dev-macros) [![Crates.io](https://img.shields.io/crates/l/sol-dev-macros.svg)](https://crates.io/crates/sol-dev-macros)
 
 ```toml
 [dependencies]
-sol_dev_macros = "0.1.4"
+sol_dev_macros = "0.1.5"
 ```
 
 ### Usage
@@ -89,7 +126,7 @@ This parses logs into JSON that looks like this:
                 "naive_local": 726,
                 "naive_global": 2971,
                 "local": 418,
-                "global": 11.4,
+                "global": 11.5,
                 "children": [<children>]
             } 
         <more children>
@@ -142,7 +179,7 @@ My advice is to only use measurements to quantify the *relative* cost of differe
 
 ```toml
 [dependencies]
-sol_dev_utils = "0.1.4"
+sol_dev_utils = "0.1.5"
 ```
 
 ### Usage
