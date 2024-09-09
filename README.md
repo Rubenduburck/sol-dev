@@ -14,9 +14,9 @@ Add the following to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-sol_dev_utils = "0.1.0"
-sol_dev_macros = "0.1.0"
-sol_dev_proc_macros = "0.1.0"
+sol_dev_utils = "0.1.2"
+sol_dev_macros = "0.1.2"
+sol_dev_proc_macros = "0.1.2"
 ```
 
 For parsing the logs, the cli can be installed using:
